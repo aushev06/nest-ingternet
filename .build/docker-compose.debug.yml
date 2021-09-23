@@ -1,0 +1,61 @@
+version: "3.2"
+
+services:
+  app:
+    build:
+      context: ../
+      target: server
+    container_name: backend
+    command: yarn start
+    environment:
+      NODE_ENV: production
+      API_PORT: 3000
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "${DATABASE_PORT}"
+      DATABASE_NAME: "${DATABASE_NAME}"
+      DATABASE_USERNAME: "${DATABASE_USERNAME}"
+      DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+    ports:
+      - 3000:3000
+    networks:
+      - app_net
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db:db
+      - redis:redis
+    volumes:
+      - type: bind
+        source: ../
+        target: /app
+
+  db:
+    ports:
+      - 5432:5432
+  redis:
+    ports:
+      - 6379:6379
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - app_net
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: pgsql
+      ADMINER_DEFAULT_SERVER: db
+networks:
+  app_net:
+    driver: bridge
+  public:
+    external: false

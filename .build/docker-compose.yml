@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  app:
+    build: ../
+    image: food-api:latest
+    environment:
+      NODE_ENV: "${NODE_ENV}"
+      API_PORT: 3333
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "${DATABASE_PORT}"
+      DATABASE_NAME: "${DATABASE_NAME}"
+      DATABASE_USERNAME: "${DATABASE_USERNAME}"
+      DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+      JWT_SECRET: "${JWT_SECRET}"
+      JWT_EXPIRE: "${JWT_EXPIRE}"
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db:db
+      - redis:redis
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "${DATABASE_NAME}"
+      POSTGRES_USER: "${DATABASE_USERNAME}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+    labels:
+      me.food.database: "${NODE_ENV}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      app_net:
+      public:
+        aliases:
+          - food_database
+
+  redis:
+    image: redis
+    restart: always
+    networks:
+      - app_net
+    volumes:
+      - redis:/data
+
+networks:
+  app_net:
+    driver: overlay
+
+  public:
+    external: true
+    name: public
+
+volumes:
+  redis:
+  postgres:
