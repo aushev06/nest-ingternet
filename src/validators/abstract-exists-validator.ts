@@ -13,9 +13,6 @@ export abstract class ExistsValidator implements ValidatorConstraintInterface {
 
   public async validate<E>(value: string, args: UniqueValidationArguments<E>): Promise<boolean> {
     const [EntityClass, findCondition = args.property] = args.constraints;
-    if ((args.property === 'product' && value === undefined) || (args.property === 'supplier' && value === undefined)) {
-      return true;
-    }
 
     try {
       return (

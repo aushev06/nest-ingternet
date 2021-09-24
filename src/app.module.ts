@@ -1,7 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Exists } from 'src/validators/exists.validator';
+import { Unique } from 'src/validators/unique.validator';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
+import { AppFilter } from '../app.filter';
+import { AppValidationPipe } from '../app.validation-pipe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -36,6 +41,19 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    Exists,
+    Unique,
+    {
+      provide: APP_FILTER,
+      useClass: AppFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: AppValidationPipe,
+      scope: Scope.REQUEST,
+    },
+  ],
 })
 export class AppModule {}

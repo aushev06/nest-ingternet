@@ -1,10 +1,13 @@
 import dotenv = require('dotenv');
 dotenv.config();
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as bodyParser from 'body-parser';
 import { useContainer } from 'class-validator';
+import { TransformInterceptor } from 'src/common/transform.interceptor';
+import { UserEntity } from 'src/entities/user.entity';
 
 import { AppModule } from './app.module';
 
@@ -14,6 +17,7 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  app.useGlobalInterceptors(new TransformInterceptor(UserEntity));
 
   const options = new DocumentBuilder()
     .setTitle('React Pizza API' + (process.env.NODE_ENV !== 'production' ? ' Sandbox' : ''))
