@@ -1,5 +1,7 @@
 import { StatusEnum } from 'src/common/enums/status.enum';
 import { CategoryEntity } from 'src/entities/category.entity';
+import { LikeableEntity } from 'src/entities/likeable.entity';
+import { ThemeEntity } from 'src/entities/theme.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import {
   BaseEntity,
@@ -8,7 +10,11 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -61,6 +67,7 @@ export class PostEntity extends BaseEntity {
     {
       onDelete: 'SET NULL',
       nullable: true,
+      cascade: false,
     },
   )
   user: UserEntity;
@@ -71,7 +78,17 @@ export class PostEntity extends BaseEntity {
     {
       onDelete: 'SET NULL',
       nullable: true,
+      cascade: false,
     },
   )
   category: CategoryEntity;
+
+  @ManyToMany(() => ThemeEntity)
+  themes: ThemeEntity[];
+
+  @OneToMany(
+    () => LikeableEntity,
+    entity => entity.post,
+  )
+  likes: LikeableEntity[];
 }

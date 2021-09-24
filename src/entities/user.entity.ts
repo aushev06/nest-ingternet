@@ -1,4 +1,6 @@
+import { Exclude } from 'class-transformer';
 import { StatusEnum } from 'src/common/enums/status.enum';
+import { LikeableEntity } from 'src/entities/likeable.entity';
 import { PostEntity } from 'src/entities/post.entity';
 import {
   BaseEntity,
@@ -24,6 +26,7 @@ export class UserEntity extends BaseEntity {
   email: string;
 
   @Column()
+  @Exclude()
   password_hash: string;
 
   @Column()
@@ -87,4 +90,10 @@ export class UserEntity extends BaseEntity {
     entity => entity.user,
   )
   posts: PostEntity[];
+
+  @OneToMany(
+    () => PostEntity,
+    entity => entity.user,
+  )
+  likes: LikeableEntity[];
 }
