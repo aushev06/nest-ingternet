@@ -6,3 +6,9 @@ export enum StatusEnum {
   STOPPED = 'stopped',
   DISABLED = 'disabled',
 }
+
+// active,Active
+// blocked,Blocked
+// pending,Pending
+// rejected,Rejected
+// stopped,Stopped
