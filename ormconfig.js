@@ -14,13 +14,13 @@ module.exports = {
         entitiesDir: 'src/entities/',
         subscribersDir: 'src/modules/',
     },
-    logging: ['query', 'error'],
+    logging: [],
     migrations: ['dist/database/migrations/*.js',],
     entities: [
         'dist/entities/**/*.entity.js',
         'dist/entities/**/*.view.js'
     ],
-    synchronize: false,
+    synchronize: true,
     migrationsRun: true,
     keepConnectionAlive: true,
     factories: [ 'dist/database/factories/**/*.js' ],

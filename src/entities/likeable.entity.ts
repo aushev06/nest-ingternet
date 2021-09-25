@@ -16,6 +16,11 @@ import {
 
 import { UserEntity } from './user.entity';
 
+export enum LikeType {
+  LIKE = 'like',
+  DISLIKE = 'dislike',
+}
+
 @Entity('likes')
 export class LikeableEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
@@ -37,7 +42,7 @@ export class LikeableEntity extends BaseEntity {
 
   @Column()
   @Index()
-  like_type: number;
+  likeType: LikeType;
 
   @CreateDateColumn()
   createdAt: Date;

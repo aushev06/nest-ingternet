@@ -1,17 +1,18 @@
 import { createParamDecorator, ExecutionContext, ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { UserEntity } from 'src/entities/user.entity';
 
 export const enum Role {
   USER = 'USER',
-  CHEF = 'CHEF',
-  STAFF = 'STAFF',
-  SUPPLIER = 'SUPPLIER',
-  CLOUD_KITCHEN = 'CLOUD_KITCHEN',
+  ADMIN = 'ADMIN',
+  GUEST = 'GUEST',
 }
 
 export const User = createParamDecorator((data: Role | Role[], ctx: ExecutionContext) => {
   const req = ctx.switchToHttp().getRequest() as Express.Request;
   if (!req.user) {
-    throw new UnauthorizedException('User not authentificated');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    req.user = ({ id: 0, sub: 'guest', role: Role.GUEST } as unknown) as UserEntity;
   }
   if (data !== undefined) {
     if (!Array.isArray(data)) {

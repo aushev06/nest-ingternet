@@ -84,6 +84,7 @@ export class PostEntity extends BaseEntity {
   category: CategoryEntity;
 
   @ManyToMany(() => ThemeEntity)
+  @JoinTable()
   themes: ThemeEntity[];
 
   @OneToMany(
