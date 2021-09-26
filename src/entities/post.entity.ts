@@ -1,5 +1,6 @@
 import { StatusEnum } from 'src/common/enums/status.enum';
 import { CategoryEntity } from 'src/entities/category.entity';
+import { CommentEntity } from 'src/entities/comment.entity';
 import { LikeableEntity } from 'src/entities/likeable.entity';
 import { ThemeEntity } from 'src/entities/theme.entity';
 import { UserEntity } from 'src/entities/user.entity';
@@ -92,4 +93,10 @@ export class PostEntity extends BaseEntity {
     entity => entity.post,
   )
   likes: LikeableEntity[];
+
+  @OneToMany(
+    () => CommentEntity,
+    entity => entity.post,
+  )
+  comments: CommentEntity[];
 }

@@ -11,6 +11,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { LikeModule } from './modules/like/like.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { LikeModule } from './modules/like/like.module';
     CategoryModule,
     PostModule,
     LikeModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, Exists, Unique],

@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { StatusEnum } from 'src/common/enums/status.enum';
+import { CommentEntity } from 'src/entities/comment.entity';
 import { LikeableEntity } from 'src/entities/likeable.entity';
 import { PostEntity } from 'src/entities/post.entity';
 import {
@@ -96,4 +97,10 @@ export class UserEntity extends BaseEntity {
     entity => entity.user,
   )
   likes: LikeableEntity[];
+
+  @OneToMany(
+    () => CommentEntity,
+    entity => entity.user,
+  )
+  comments: CommentEntity[];
 }

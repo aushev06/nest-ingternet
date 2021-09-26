@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { StatusEnum } from 'src/common/enums/status.enum';
-import {BaseDto, PaginatedDto, ThemeDto} from 'src/dto/dtos';
+import { BaseDto, PaginatedDto, ThemeDto } from 'src/dto/dtos';
 import { CategoryEntity } from 'src/entities/category.entity';
 import { ThemeEntity } from 'src/entities/theme.entity';
 import { UserEntity } from 'src/entities/user.entity';

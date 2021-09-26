@@ -13,20 +13,18 @@ export class LikeService {
       .createQueryBuilder()
       .where('post_id=:postId AND user_id=:userId', { postId, userId: user.id, type });
 
-    const postIsLiked = await qb.clone().getCount();
+    // const postIsLiked = await qb.clone().getCount();
 
-    if (!postIsLiked) {
-      const data = await this.repository.save({
-        post: { id: postId },
-        user: { id: user.id },
-        likeType: type,
-      });
+    const data = await this.repository.save({
+      post: { id: postId },
+      user: { id: user.id },
+      likeType: type,
+    });
 
-      await qb
-        .clone()
-        .andWhere('id != :id', { id: data.id })
-        .delete()
-        .execute();
-    }
+    await qb
+      .clone()
+      .andWhere('id != :id', { id: data.id })
+      .delete()
+      .execute();
   }
 }

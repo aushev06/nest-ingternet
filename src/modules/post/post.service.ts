@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StatusEnum } from 'src/common/enums/status.enum';
+import { LikeType } from 'src/entities/likeable.entity';
 import { PostEntity } from 'src/entities/post.entity';
 import { SavePostDto, SearchPostDto } from 'src/modules/post/post.dto';
 import { Repository } from 'typeorm';
@@ -15,6 +16,15 @@ export class PostService {
   async findAll(dto: SearchPostDto): Promise<[PostEntity[], number]> {
     const qb = this.repository.createQueryBuilder('p');
     qb.leftJoinAndSelect('p.category', 'category');
+    qb.loadRelationCountAndMap('p.likesCount', 'p.likes', 'likes', qb => {
+      return qb.where('likes.like_type=:type', { type: LikeType.LIKE });
+    });
+
+    qb.loadRelationCountAndMap('p.dislikesCount', 'p.likes', 'dislikes', qb => {
+      return qb.where('dislikes.like_type=:type', { type: LikeType.DISLIKE });
+    });
+
+    qb.loadRelationCountAndMap('p.commentsCount', 'p.comments', 'comments');
 
     qb.where('p.status=:status');
 
